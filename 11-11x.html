@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo Project</title>
+</head>
+<style>
+  body{
+    font-family: Arial;
+  }
+  .todo-grid,
+  .todo-input-grid{
+    display: grid;
+    grid-template-columns:  200px 150px 100px 80px;
+    column-gap: 10px;
+    row-gap: 10px;
+    align-items: center;
+  }
+  @media(max-width: 600px){
+    .todo-grid,
+  .todo-input-grid{
+    display: grid;
+    grid-template-columns:  100px 80px 80px 80px;
+    column-gap: 10px;
+    row-gap: 10px;
+    align-items: center;
+  }
+   .todo-input-grid{
+    margin-bottom: 10px;
+    align-items: stretch;
+  }
+     .name-input,
+  .date-input{
+    font-size: 8px;
+  }
+  .add-todo-button{
+    background-color: green;
+    color: white;
+    border: none;
+    font-size: 8px;
+    cursor: pointer;
+  }
+   .delete-button{
+    background-color: darkred;
+    color: white;
+    border: none;
+    font-size: 8px;
+    cursor: pointer;
+    padding: 6px;
+  }
+  }
+  .todo-input-grid{
+    margin-bottom: 10px;
+    align-items: stretch;
+  }
+  .name-input,
+  .date-input{
+    font-size: 15px;
+    padding: 6px;
+  }.add-todo-button{
+    background-color: green;
+    color: white;
+    border: none;
+    font-size: 15px;
+    cursor: pointer;
+  }
+  .delete-button{
+    background-color: darkred;
+    color: white;
+    border: none;
+    font-size: 15px;
+    cursor: pointer;
+    padding: 6px;
+  }
+  .diary{
+    font-size: 50px;
+    font-weight: bold;
+    font-family: 'Franklin Gothic Medium';
+    margin-bottom: none;
+    margin-top: none;
+  }
+
+</style>
+<body>
+<p class="diary">
+  Frank's Diary
+</p>
+<div class="todo-input-grid">
+    <input class="js-name-input name-input" type="text" placeholder="Todo name">
+
+    <input type="date" 
+    class="js-date-input date-input">
+    <input type="time" class="js-time-input date-input">
+    <button onclick="
+    addTodo();
+" class="add-todo-button">Add</button>
+
+</div>
+
+
+<div class="js-todo-list todo-grid" style="color: rgb(3, 114, 3);">
+
+</div>
+
+
+  <script>
+    const todoList =JSON.parse(localStorage.getItem('todoList')) ||[{
+      name:'Make dinner',
+      date: '2026-10-30',
+      time: '16:00'}, {
+      name:'Wash dishes',
+      date:'2026-10-20',
+      time: '16:00'}, {
+      name:'Watch YouTube',
+      date:'2026-10-31',
+      time: '16:00'}];
+    renderTodoList();
+
+    
+     
+    function renderTodoList(){
+          let todoListHtml = '';
+
+          for(let i=0; i<todoList.length; i++){
+            const todoObject = todoList[i];
+            //const name = todoObject.name;
+            //const date = todoObject.date;
+            const {name, date, time} = todoObject;
+            const html =
+              `<div>
+                ${name}
+              </div>
+              <div>
+                 ${date}
+              </div>
+             <div>
+                ${time}
+              </div>
+            <button class= "delete-button" onclick="
+            todoList.splice(${i}, 1);
+             renderTodoList();
+            ">
+            Delete
+            </button>
+              `;
+            todoListHtml += html;
+          }
+          
+          console.log(todoListHtml);
+
+          document.querySelector('.js-todo-list').innerHTML= todoListHtml;
+
+          localStorage.setItem('todoList', JSON.stringify(todoList));
+        }
+
+    function addTodo(){
+   const inputElement = document.querySelector('.js-name-input');
+   const name = inputElement.value;
+
+   const dateInputElement = document.querySelector('.js-date-input');
+   const date = dateInputElement.value;
+
+   const timeInputElement = document.querySelector('.js-time-input');
+   const time = timeInputElement.value;
+   
+   todoList.push({
+    //name: name,
+    //date: date
+
+    // shorthand property
+     name,
+    date,
+    time});   
+
+   
+console.log(todoList);
+inputElement.value = '';
+
+renderTodoList();
+localStorage.setItem('todoList', JSON.stringify(todoList));
+   
+    }
+  </script>
+  
+</body>
+</html>
